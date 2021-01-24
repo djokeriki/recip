@@ -1,25 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+import {useState, useEffect} from 'react';
+import {v4 as uuidv4} from 'uuid'
+import axios from 'axios'
+import './App.css'
+import Recipe from './components/Recipe';
 
-function App() {
+const App = () => {
+  const [query, setQuery] = useState('');
+  const [recipes, setRecipes] = useState([]);
+
+  const url = `https://api.edamam.com/search?q=${query}&app_id=${process.env.REACT_APP_APP_ID}&app_key=${process.env.REACT_APP_APP_KEY}`;
+  const getData = async () => {
+    const response = await axios.get(url);
+    console.log(response);
+    setRecipes(response.data.hits);
+    setQuery('');
+  }
+  const onSubmit = e => {
+    e.preventDefault();
+    getData();
+  }
+  const onChange = e => {
+    setQuery(e.target.value);
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>FOOD SEARCHING APP</h1>
+      <form className="search-form" onSubmit={onSubmit}>
+        <input type="text"placeholder="Search Food" autoComplete="off" value={query} onChange={onChange} />
+        <input type="submit" value="search" />
+      </form>
+      <div className="recipes">
+        {recipes && recipes.map(recipe => (
+         <Recipe key={uuidv4()} recipe={recipe} />
+        ))}
+      </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
