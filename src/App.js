@@ -8,7 +8,7 @@ const App = () => {
   const [query, setQuery] = useState('');
   const [recipes, setRecipes] = useState([]);
 
-  const url = `https://api.edamam.com/search?q=${query}&app_id=${process.env.REACT_APP_APP_ID}&app_key=${process.env.REACT_APP_APP_KEY}`;
+  const url = `https://api.edamam.com/search?q=${query}&app_id=${process.env.APP_ID}&app_key=${process.env.APP_KEY}`;
   const getData = async () => {
     const response = await axios.get(url);
     console.log(response);
